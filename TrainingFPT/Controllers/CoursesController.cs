@@ -123,64 +123,7 @@ namespace TrainingFPT.Controllers
             return RedirectToAction(nameof(CoursesController.Index), "Courses");
         }
 
-        //[HttpGet]
-        //public IActionResult Edit(int id = 0)
-        //{
-        //    CourseDetail courseDetail = new CourseQuery().GetDataCourseById(id);
-        //    List<SelectListItem> items = new List<SelectListItem>();
-        //    var dataCategories = new CategoryQuery().GetAllCategories(null, null);
-        //    foreach (var category in dataCategories)
-        //    {
-        //        items.Add(new SelectListItem
-        //        {
-        //            Value = category.Id.ToString(),
-        //            Text = category.Name
-        //        });
-        //    }
-
-        //    ViewBag.Categories = items;
-        //    return View(courseDetail);
-        //}
-
-        //[HttpPost]
-        //public IActionResult Edit(CourseDetail courseDetail, IFormFile Image)
-        //{
-        //        try
-        //        {
-        //            var detail = new CourseQuery().GetDataCourseById(courseDetail.CourseId);
-        //            string uniqueImage = detail.ViewImageCourse; //lấy lại tên ảnh cũ trước khi thay ảnh mới (nếu có)
-
-        //            //kiểm tra người dùng có muốn thay ảnh poster không?
-        //            if (courseDetail.ViewImageCourse != null)
-        //            {
-        //                //có thay ảnh
-        //                uniqueImage = UploadFileHelper.UploadFile(Image);
-        //            }
-        //            bool update = new CourseQuery().UpdateCourseById(
-        //                courseDetail.NameCourse,
-        //                courseDetail.CategoryId,
-        //                courseDetail.Description,
-        //                courseDetail.StartDate,
-        //                courseDetail.EndDate,
-        //                uniqueImage,
-        //                courseDetail.Status,
-        //                courseDetail.CourseId);
-        //            if (update)
-        //            {
-        //                TempData["updateStatus"] = true;
-        //            }
-        //            else
-        //            {
-        //                TempData["updateStatus"] = false;
-        //            }
-        //            return RedirectToAction(nameof(CoursesController.Index), "Courses");
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return Ok(ex.Message);
-        //            //return View(courseDetail);
-        //        }
-        //}
+        
 
         [HttpGet]
         public IActionResult Edit(int id)
