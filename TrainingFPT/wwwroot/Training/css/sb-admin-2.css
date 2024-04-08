@@ -2357,8 +2357,8 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #4e73df;
-  border-color: #4e73df;
+  background-color: #1cc88a;
+  border-color: #1cc88a;
 }
 
 .btn-primary:hover {
@@ -9900,8 +9900,8 @@ a:focus {
 }
 
 .bg-gradient-primary {
-  background-color: #4e73df;
-  background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+  background-color: #1cc88a;
+  background-image: linear-gradient(180deg, #1cc88a 10%, #36b9cc 100%, #4e73df 10%);
   background-size: cover;
 }
 
@@ -10861,7 +10861,7 @@ a:focus {
 }
 
 .bg-login-image {
-    background: url("https://fap.fpi.edu.vn/images/NewPage/Banner.png");
+    background: url("https://www.sme-news.co.uk/wp-content/uploads/2021/11/Login.jpg");
     background-position: center;
     background-size: cover;
 }

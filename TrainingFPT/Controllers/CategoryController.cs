@@ -9,11 +9,6 @@ namespace TrainingFPT.Controllers
     {
         public IActionResult Index(string SearchString, string Status)
         {
-            //if (String.IsNullOrEmpty(HttpContext.Session.GetString("SessionUsername")))
-            //{
-            //    return RedirectToAction(nameof(LoginController.Index), "login");
-            //}
-
             CategoryViewModel categoryViewModel = new CategoryViewModel();
             categoryViewModel.CategoryDetailList = new List<CategoryDetail>();
             var dataCategory = new CategoryQuery().GetAllCategories(SearchString, Status);
@@ -33,7 +28,6 @@ namespace TrainingFPT.Controllers
             ViewData["keyword"] = SearchString;
             ViewBag.Status = Status;
             return View(categoryViewModel);
-
         }
         
         [HttpGet]

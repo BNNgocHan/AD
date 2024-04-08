@@ -1,19 +1,68 @@
-﻿using Microsoft.Data.SqlClient;
-using TrainingFPT.Migrations;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Data.SqlClient;
 
 namespace TrainingFPT.Models.Queries
 {
     public class CourseQuery
     {
-        // HÀM LẤY DANH SÁCH KHÓA HỌC VÀ THÔNG TIN CHI TIẾT
-        public List<CourseDetail> GetAllDataCourses()
+        // HÀM LẤY THÔNG TIN
+        public CourseDetail GetDataCouseById(int id = 0)
         {
-            List<CourseDetail> courses = new List<CourseDetail>(); 
+            CourseDetail courseDetail = new CourseDetail();
             using (SqlConnection connection = Database.GetSqlConnection())
             {
-                string sql = "SELECT [co].*, [ca].[Name] FROM [Courses] AS [co] INNER JOIN [Categories] AS [ca] ON [co].[CategoryId] = [ca].[Id] WHERE [co].[DeletedAt] IS NULL";
+                string sqlQuery = "SELECT * FROM [Courses] WHERE [Id] = @id AND [DeletedAt] IS NULL";
                 connection.Open();
-                SqlCommand cmd = new SqlCommand(sql, connection);
+                SqlCommand cmd = new SqlCommand(sqlQuery, connection);
+                cmd.Parameters.AddWithValue("@id", id);
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        courseDetail.CourseId = Convert.ToInt32(reader["Id"]);
+                        courseDetail.NameCourse = reader["NameCourse"].ToString();
+                        courseDetail.Description = reader["Description"].ToString();
+                        courseDetail.CategoryId = Convert.ToInt32(reader["CategoryId"]);
+                        courseDetail.StartDate = Convert.ToDateTime(reader["StartDate"]);
+                        courseDetail.EndDate = Convert.ToDateTime(reader["EndDate"]);
+                        courseDetail.ViewImageCourse = reader["Image"].ToString();
+                        courseDetail.viewCategoryName = reader["CategoryId"].ToString();
+                        courseDetail.Status = reader["Status"].ToString();
+                    }
+                    connection.Close(); // ngat ket noi
+                }
+            }
+            return courseDetail;
+        }
+
+        // LẤY TOÀN BỘ DANH SÁCH VÀ THÔNG TIN CHI TIẾT
+        public List<CourseDetail> GetAllDataCourses(string? keyword, string? filter)
+        {
+            string dataKeyword = "%" + keyword + "%";
+            List<CourseDetail> courses = new List<CourseDetail>();
+            using (SqlConnection connection = Database.GetSqlConnection())
+            {
+                string sqlQuery = string.Empty;
+                if (filter != null)
+                {
+                    sqlQuery = "SELECT * FROM [Courses] WHERE [NameCourse] LIKE @keyword AND [DeletedAt] IS NULL AND [Status] = @status";
+                }
+                else
+                {
+                    sqlQuery = "SELECT * FROM [Courses] WHERE [NameCourse] LIKE @keyword AND [DeletedAt] IS NULL";
+                }
+
+                SqlCommand cmd = new SqlCommand(sqlQuery, connection);
+                cmd.Parameters.AddWithValue("@keyword", dataKeyword ?? DBNull.Value.ToString());
+                if (filter != null)
+                {
+                    cmd.Parameters.AddWithValue("@status", filter ?? DBNull.Value.ToString());
+                }
+
+
+                string sql = "SELECT [co].*, CONVERT(VARCHAR(50), [co].[StartDate], 101) AS ViewStartDate, CONVERT(VARCHAR(50), [co].[EndDate], 101) AS ViewEndDate, [ca].[Name] FROM [Courses] AS [co] INNER JOIN [Categories] AS [ca] ON [co].[CategoryId] = [ca].[Id] WHERE [co].[DeletedAt] IS NULL";
+                connection.Open();
+                //SqlCommand cmd = new SqlCommand(sql, connection);
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -27,16 +76,15 @@ namespace TrainingFPT.Models.Queries
                         detail.EndDate = Convert.ToDateTime(reader["EndDate"]);
                         detail.ViewImageCourse = reader["Image"].ToString();
                         detail.Status = reader["Status"].ToString();
-                        detail.viewCategoryName = reader["Name"].ToString();
+                        detail.viewCategoryName = reader["CategoryId"].ToString();
                         courses.Add(detail);
                     }
-                    connection.Close();
                 }
-                
+                connection.Close();
             }
             return courses;
         }
-        
+
         // INSERT
         public int InsertDataCourse(
             string nameCourse,
@@ -48,31 +96,73 @@ namespace TrainingFPT.Models.Queries
             string imageCourse
         )
         {
-            string valEnddate = DBNull.Value.ToString();
-            if ( valEnddate != null )
+            string valStartTime = startDate.ToString("yyyy-MM-dd HH:mm:ss");
+            string valEndate = DBNull.Value.ToString();
+            if (endDate != null)
             {
-                valEnddate = endDate.ToString();
+                valEndate = endDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
             }
 
             int idCourse = 0;
             using (SqlConnection connection = Database.GetSqlConnection())
             {
                 string sqlQuery = "INSERT INTO [Courses]([CategoryId], [NameCourse], [Description], [Image], [Status], [StartDate], [EndDate], [CreatedAt]) VALUES(@CategoryId, @NameCourse, @Description, @Image, @Status, @StartDate, @EndDate, @CreatedAt) SELECT SCOPE_IDENTITY()";
-                //SELECT SCOPE_IDENTITY(): lấy ra ID vừa thêm
+                // SELECT SCOPE_IDENTITY() : lay ra ID vua moi them.
                 connection.Open();
-                SqlCommand cmd = new SqlCommand( sqlQuery, connection );
+                SqlCommand cmd = new SqlCommand(sqlQuery, connection);
                 cmd.Parameters.AddWithValue("@CategoryId", categoryId);
                 cmd.Parameters.AddWithValue("@NameCourse", nameCourse);
                 cmd.Parameters.AddWithValue("@Description", description ?? DBNull.Value.ToString());
-                cmd.Parameters.AddWithValue("Image", imageCourse);
-                cmd.Parameters.AddWithValue("Status", status);
-                cmd.Parameters.AddWithValue("StartDate", startDate);
-                cmd.Parameters.AddWithValue("@EndDate", valEnddate);
-                cmd.Parameters.AddWithValue("CreatedAt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                idCourse = Convert.ToInt32( cmd.ExecuteScalar() );
+                cmd.Parameters.AddWithValue("@Image", imageCourse);
+                cmd.Parameters.AddWithValue("@Status", status);
+                cmd.Parameters.AddWithValue("@StartDate", valStartTime);
+                cmd.Parameters.AddWithValue("@EndDate", valEndate);
+                cmd.Parameters.AddWithValue("@CreatedAt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                idCourse = Convert.ToInt32(cmd.ExecuteScalar());
                 connection.Close();
             }
             return idCourse;
+        }
+
+        // UPDATE
+        public bool UpdateCourseById(
+          string nameCourse,
+          string description,
+          string image,
+          int categoryId,
+          DateTime startDate,
+          DateTime? endDate,
+          string status,
+          int id
+        )
+        {
+            bool checkUpdate = false;
+            string valEndate = DBNull.Value.ToString();
+            if (endDate != null)
+            {
+                valEndate = endDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+            }
+
+            using (SqlConnection connection = Database.GetSqlConnection())
+            {
+                string sqlUpdate = "UPDATE [Courses] SET [NameCourse] = @nameCourse, [CategoryId] = @Categories, [Description] = @description, [Image] = @image, [StartDate] = @startDate, [EndDate] = @endDate, [Status] = @status, [UpdatedAt] = @updatedAt WHERE [Id] = @id AND [DeletedAt] IS NULL";
+                connection.Open();
+                SqlCommand cmd = new SqlCommand(sqlUpdate, connection);
+                cmd.Parameters.AddWithValue("@nameCourse", nameCourse ?? DBNull.Value.ToString());
+                cmd.Parameters.AddWithValue("@Categories", categoryId);
+                cmd.Parameters.AddWithValue("@description", description ?? DBNull.Value.ToString());
+                cmd.Parameters.AddWithValue("@image", image ?? DBNull.Value.ToString());
+                cmd.Parameters.AddWithValue("@startDate", startDate);
+                cmd.Parameters.AddWithValue("@endDate", valEndate);
+                cmd.Parameters.AddWithValue("@status", status ?? DBNull.Value.ToString());
+                cmd.Parameters.AddWithValue("@updatedAt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                checkUpdate = true;
+
+            }
+            return checkUpdate;
         }
 
         // DELETE
@@ -92,70 +182,6 @@ namespace TrainingFPT.Models.Queries
             }
             //false: kh xoa dc - true: xoa thanh cong
             return statusDelete;
-        }
-
-        // UPDATE
-        public bool UpdateCourseById(
-            string nameCourse,
-            int categoryId,
-            string description,
-            DateTime startDate,
-            DateTime? endDate,
-            string viewImageCourse,
-            string status,
-            int courseId
-        )
-        {
-            bool checkUpdate = false;
-            using (SqlConnection connection = Database.GetSqlConnection())
-            {
-                string sqlUpdate = "UPDATE[Courses] SET[NameCourse] = @NameCourse, [CategoryId] = @CategoryId, [Description] = @Description, [StartDate] = @StartDate, [EndDate] = @EndDate, [Image] = @Image, [Status] = @Status, [UpdatedAt] = @updatedAt WHERE[Id] = @CourseId AND[DeletedAt] IS NULL";
-                connection.Open();
-                SqlCommand cmd = new SqlCommand(sqlUpdate, connection);
-                cmd.Parameters.AddWithValue("@NameCourse", nameCourse ?? DBNull.Value.ToString());
-                cmd.Parameters.AddWithValue("@CategoryId", categoryId);
-                cmd.Parameters.AddWithValue("@Description", description ?? DBNull.Value.ToString());
-                cmd.Parameters.AddWithValue("@StartDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                cmd.Parameters.AddWithValue("@EndDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                cmd.Parameters.AddWithValue("@Status", status ?? DBNull.Value.ToString());
-                cmd.Parameters.AddWithValue("@Image", viewImageCourse ?? DBNull.Value.ToString());
-                cmd.Parameters.AddWithValue("@updatedAt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                cmd.Parameters.AddWithValue("@CourseId", courseId);
-
-                cmd.ExecuteNonQuery();
-                connection.Close();
-                checkUpdate = true;
-            }
-            return checkUpdate;
-        }
-
-        // HÀM LẤY THÔNG TIN CHI TIẾT CỦA CATEGORY
-        public CourseDetail GetDataCourseById(int id = 0)
-        {
-            CourseDetail courseDetail = new CourseDetail();
-            using (SqlConnection connection = Database.GetSqlConnection())
-            {
-                string sqlQuery = "SELECT * FROM [Courses] WHERE [Id] = @id AND [DeletedAt] IS NULL";
-                connection.Open();
-                SqlCommand cmd = new SqlCommand(sqlQuery, connection);
-                cmd.Parameters.AddWithValue("@id", id);
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        courseDetail.CourseId = Convert.ToInt32(reader["Id"]);
-                        courseDetail.NameCourse = reader["NameCourse"].ToString();
-                        courseDetail.CategoryId = Convert.ToInt32(reader["CategoryId"]);
-                        courseDetail.Description = reader["Description"].ToString();
-                        courseDetail.StartDate = Convert.ToDateTime(reader["StartDate"]);
-                        courseDetail.EndDate = reader["EndDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(reader["EndDate"]);
-                        courseDetail.ViewImageCourse = reader["Image"].ToString();
-                        courseDetail.Status = reader["Status"].ToString();
-                    }
-                }
-                connection.Close(); //ngắt kết nối
-            }
-            return courseDetail;
         }
     }
 }

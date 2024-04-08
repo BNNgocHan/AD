@@ -11,14 +11,12 @@
 
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
-
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <div class="card">
             <div class="card-header">
                 <h5> Update Course</h5>
             </div>
-
             <div class="card-body">
                 <form enctype="multipart/form-data" asp-action="Edit">
                     <div class="row">
@@ -27,44 +25,41 @@
                                 <label asp-for="NameCourse"></label>
                                 <input type="text" asp-for="NameCourse" class="form-control" />
                                 <span asp-validation-for="NameCourse" class="text-danger"></span>
+                                @* id cua course *@
+                                <input type="hidden" asp-for="CourseId" />
                             </div>
-
                             <div class="form-group mb-3">
-                                <label asp-for="CategoryId"></label>
-                                <select asp-for="CategoryId" class="form-control" asp-items="@((IEnumerable<SelectListItem>)ViewBag.Categories)">
-                                    <option value="">-- Select Category --</option>
+                                <label> Category </label>
+                                <select class="form-control"
+                                        asp-for="CategoryId"
+                                        asp-items="@(new SelectList(ViewBag.Categories, "Value", "Text"))">
                                 </select>
-                                <span asp-validation-for="CategoryId" class="text-danger"></span>
+                                <span asp-validation-for="CategoryId"></span>
                             </div>
-
                             <div class="form-group mb-3">
                                 <label asp-for="Description"></label>
                                 <textarea asp-for="Description" class="form-control" rows="5"></textarea>
                             </div>
-
                             <div class="form-group">
                                 <label asp-for="Status"></label>
                                 <select class="form-control" asp-for="Status">
-                                    <option value="">-- Status --</option>
-                                    <option value="Active">Active</option>
-                                    <option value="Deactive">Deactive</option>
+                                    <option value=""> -- Choose --</option>
+                                    <option value="Active"> Active </option>
+                                    <option value="Deactive"> Deactive </option>
                                 </select>
                                 <span asp-validation-for="Status"></span>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-6">
+                        <div class="com-sm-12 col-md-6">
                             <div class="form-group mb-3">
                                 <label asp-for="StartDate"></label>
                                 <input type="date" asp-for="StartDate" class="form-control" />
                                 <span asp-validation-for="StartDate"></span>
                             </div>
-
                             <div class="form-group mb-3">
                                 <label asp-for="EndDate"></label>
                                 <input type="date" asp-for="EndDate" class="form-control" />
-                                <span asp-validation-for="EndDate"></span>
                             </div>
-
                             <div class="form-group mb-3">
                                 <label asp-for="Image"></label>
                                 <input type="file" asp-for="Image" class="form-control" />

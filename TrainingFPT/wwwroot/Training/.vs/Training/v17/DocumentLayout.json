@@ -1,0 +1,122 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Application Development\\Training\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{50A882B7-80BD-4CAE-BE87-18AD13E95F81}|Training\\Training.csproj|d:\\application development\\training\\training\\dbcontext\\topicsdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50A882B7-80BD-4CAE-BE87-18AD13E95F81}|Training\\Training.csproj|solutionrelative:training\\dbcontext\\topicsdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50A882B7-80BD-4CAE-BE87-18AD13E95F81}|Training\\Training.csproj|d:\\application development\\training\\training\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50A882B7-80BD-4CAE-BE87-18AD13E95F81}|Training\\Training.csproj|solutionrelative:training\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50A882B7-80BD-4CAE-BE87-18AD13E95F81}|Training\\Training.csproj|d:\\application development\\training\\training\\dbcontext\\coursedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50A882B7-80BD-4CAE-BE87-18AD13E95F81}|Training\\Training.csproj|solutionrelative:training\\dbcontext\\coursedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50A882B7-80BD-4CAE-BE87-18AD13E95F81}|Training\\Training.csproj|d:\\application development\\training\\training\\dbcontext\\trainingdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50A882B7-80BD-4CAE-BE87-18AD13E95F81}|Training\\Training.csproj|solutionrelative:training\\dbcontext\\trainingdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50A882B7-80BD-4CAE-BE87-18AD13E95F81}|Training\\Training.csproj|d:\\application development\\training\\training\\dbcontext\\rolesdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50A882B7-80BD-4CAE-BE87-18AD13E95F81}|Training\\Training.csproj|solutionrelative:training\\dbcontext\\rolesdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50A882B7-80BD-4CAE-BE87-18AD13E95F81}|Training\\Training.csproj|d:\\application development\\training\\training\\dbcontext\\categoriesdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50A882B7-80BD-4CAE-BE87-18AD13E95F81}|Training\\Training.csproj|solutionrelative:training\\dbcontext\\categoriesdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Application Development\\Training\\Training\\Program.cs",
+              "RelativeDocumentMoniker": "Training\\Program.cs",
+              "ToolTip": "D:\\Application Development\\Training\\Training\\Program.cs",
+              "RelativeToolTip": "Training\\Program.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAABQAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-20T06:34:34.266Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TopicsDBContext.cs",
+              "DocumentMoniker": "D:\\Application Development\\Training\\Training\\DBContext\\TopicsDBContext.cs",
+              "RelativeDocumentMoniker": "Training\\DBContext\\TopicsDBContext.cs",
+              "ToolTip": "D:\\Application Development\\Training\\Training\\DBContext\\TopicsDBContext.cs",
+              "RelativeToolTip": "Training\\DBContext\\TopicsDBContext.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACsAAAA0AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-20T08:09:02.48Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CourseDBContext.cs",
+              "DocumentMoniker": "D:\\Application Development\\Training\\Training\\DBContext\\CourseDBContext.cs",
+              "RelativeDocumentMoniker": "Training\\DBContext\\CourseDBContext.cs",
+              "ToolTip": "D:\\Application Development\\Training\\Training\\DBContext\\CourseDBContext.cs",
+              "RelativeToolTip": "Training\\DBContext\\CourseDBContext.cs",
+              "ViewState": "AQIAABkAAAAAAAAAAAAxwCgAAAA0AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-20T07:52:43.722Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CategoriesDBContext.cs",
+              "DocumentMoniker": "D:\\Application Development\\Training\\Training\\DBContext\\CategoriesDBContext.cs",
+              "RelativeDocumentMoniker": "Training\\DBContext\\CategoriesDBContext.cs",
+              "ToolTip": "D:\\Application Development\\Training\\Training\\DBContext\\CategoriesDBContext.cs",
+              "RelativeToolTip": "Training\\DBContext\\CategoriesDBContext.cs",
+              "ViewState": "AQIAABMAAAAAAAAAAAA5wCIAAAA0AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-20T07:28:19.599Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "TrainingDBContext.cs",
+              "DocumentMoniker": "D:\\Application Development\\Training\\Training\\DBContext\\TrainingDBContext.cs",
+              "RelativeDocumentMoniker": "Training\\DBContext\\TrainingDBContext.cs",
+              "ToolTip": "D:\\Application Development\\Training\\Training\\DBContext\\TrainingDBContext.cs",
+              "RelativeToolTip": "Training\\DBContext\\TrainingDBContext.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAwAAAA6AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-20T06:36:47.114Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "RolesDBContext.cs",
+              "DocumentMoniker": "D:\\Application Development\\Training\\Training\\DBContext\\RolesDBContext.cs",
+              "RelativeDocumentMoniker": "Training\\DBContext\\RolesDBContext.cs",
+              "ToolTip": "D:\\Application Development\\Training\\Training\\DBContext\\RolesDBContext.cs",
+              "RelativeToolTip": "Training\\DBContext\\RolesDBContext.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAAwBkAAAAwAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-20T06:27:23.332Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

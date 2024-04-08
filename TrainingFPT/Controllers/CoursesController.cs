@@ -8,8 +8,9 @@ namespace TrainingFPT.Controllers
 {
     public class CoursesController : Controller
     {
+        // INDEX
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(string SearchString, string Status)
         {
             //if (String.IsNullOrEmpty(HttpContext.Session.GetString("SessionUsername")))
             //{
@@ -18,7 +19,7 @@ namespace TrainingFPT.Controllers
 
             CoursesViewModel course = new CoursesViewModel();
             course.CourseDetailList = new List<CourseDetail>();
-            var dataCourses = new CourseQuery().GetAllDataCourses();
+            var dataCourses = new CourseQuery().GetAllDataCourses(SearchString, Status);
             foreach (var data in dataCourses)
             {
                 course.CourseDetailList.Add(new CourseDetail
@@ -31,14 +32,15 @@ namespace TrainingFPT.Controllers
                     StartDate = data.StartDate,
                     EndDate = data.EndDate,
                     ViewImageCourse = data.ViewImageCourse,
-                    viewCategoryName = data.viewCategoryName,
-                    CreatedAt = data.CreatedAt,
-                    UpdatedAt = data.UpdatedAt
+                    viewCategoryName = data.viewCategoryName
                 });
             }
+            ViewData["keyword"] = SearchString;
+            ViewBag.Status = Status;
             return View(course);
         }
 
+        // ADD
         [HttpGet]
         public IActionResult Add()
         {
@@ -53,20 +55,22 @@ namespace TrainingFPT.Controllers
                     Text = category.Name
                 });
             }
-
             ViewBag.Categories = items;
-            return View();
+            return View(course);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult>Add(CourseDetail course, IFormFile Image)
+        public async Task<IActionResult> Add(CourseDetail course, IFormFile Image)
         {
+            // return Ok(course);
             if (ModelState.IsValid)
             {
                 try
                 {
+                    // return Ok(course);
                     string imageCourse = UploadFileHelper.UploadFile(Image);
+                    // return Ok(course);
                     int idCourse = new CourseQuery().InsertDataCourse(
                         course.NameCourse,
                         course.CategoryId,
@@ -77,7 +81,7 @@ namespace TrainingFPT.Controllers
                         imageCourse
                     );
 
-                    if ( idCourse > 0 )
+                    if (idCourse > 0)
                     {
                         TempData["saveStatus"] = true;
                     }
@@ -89,7 +93,7 @@ namespace TrainingFPT.Controllers
                 }
                 catch (Exception ex)
                 {
-                    //nếu có lỗi
+                    // neu co loi
                     return Ok(ex.Message);
                 }
             }
@@ -103,9 +107,65 @@ namespace TrainingFPT.Controllers
                     Text = category.Name
                 });
             }
-
             ViewBag.Categories = items;
-            return View();
+            return View(course);
+        }
+        
+        [HttpGet]
+        public IActionResult Edit(int id = 0)
+        {
+            CourseDetail courseDetail = new CourseQuery().GetDataCouseById(id);
+            List<SelectListItem> items = new List<SelectListItem>();
+            var dataCategories = new CategoryQuery().GetAllCategories(null, null);
+            foreach (var category in dataCategories)
+            {
+                items.Add(new SelectListItem
+                {
+                    Value = category.Id.ToString(),
+                    Text = category.Name
+                });
+            }
+            ViewBag.Categories = items;
+            return View(courseDetail);
+        }
+        [HttpPost]
+        public IActionResult Edit(CourseDetail courseDetail, IFormFile Image)
+        {
+            try
+            {
+                //courseDetail.CategoryId = 2;
+                var detail = new CourseQuery().GetDataCouseById(courseDetail.CourseId);
+                // return Ok(courseDetail);
+                string uniqueImage = detail.ViewImageCourse;
+                if (courseDetail.Image != null)
+                {
+                    uniqueImage = UploadFileHelper.UploadFile(Image);
+                }
+                bool update = new CourseQuery().UpdateCourseById(
+                    courseDetail.NameCourse,
+                    courseDetail.Description,
+                    uniqueImage,
+                    courseDetail.CategoryId,
+                    courseDetail.StartDate,
+                    courseDetail.EndDate,
+                    courseDetail.Status,
+                    courseDetail.CourseId);
+                if (update)
+                {
+                    TempData["updateStatus"] = true;
+                }
+                else
+                {
+                    TempData["updateStatus"] = false;
+                }
+                return RedirectToAction(nameof(CoursesController.Index), "Courses");
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.Message);
+                // return View(courseDetail);
+            }
+
         }
 
         [HttpGet]
@@ -123,86 +183,5 @@ namespace TrainingFPT.Controllers
             return RedirectToAction(nameof(CoursesController.Index), "Courses");
         }
 
-        
-
-        [HttpGet]
-        public IActionResult Edit(int id)
-        {
-            CourseDetail courseDetail = new CourseQuery().GetDataCourseById(id);
-
-            List<SelectListItem> items = new List<SelectListItem>();
-            var dataCategories = new CategoryQuery().GetAllCategories(null, null);
-            foreach (var category in dataCategories)
-            {
-                items.Add(new SelectListItem
-                {
-                    Value = category.Id.ToString(),
-                    Text = category.Name
-                });
-            }
-
-            ViewBag.Categories = items;
-            return View(courseDetail);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(CourseDetail courseDetail, IFormFile Image)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var detail = new CourseQuery().GetDataCourseById(courseDetail.CourseId);
-                    string uniqueImage = detail.ViewImageCourse; //lấy lại tên ảnh cũ trước khi thay ảnh mới (nếu có)
-
-                    //kiểm tra người dùng có muốn thay ảnh poster không?
-                    if (courseDetail.ViewImageCourse != null)
-                    {
-                        //có thay ảnh
-                        uniqueImage = UploadFileHelper.UploadFile(Image);
-                    }
-
-                    bool update = new CourseQuery().UpdateCourseById(
-                        courseDetail.NameCourse,
-                        courseDetail.CategoryId,
-                        courseDetail.Description,
-                        courseDetail.StartDate,
-                        courseDetail.EndDate,
-                        uniqueImage,
-                        courseDetail.Status,
-                        courseDetail.CourseId
-                    );
-
-                    if (update)
-                    {
-                        TempData["updateStatus"] = true;
-                    }
-                    else
-                    {
-                        TempData["updateStatus"] = false;
-                    }
-                    return RedirectToAction(nameof(CoursesController.Index), "Courses");
-                }
-                catch (Exception ex)
-                {
-                    return Ok(ex.Message);
-                }
-            }
-
-            List<SelectListItem> items = new List<SelectListItem>();
-            var dataCategories = new CategoryQuery().GetAllCategories(null, null);
-            foreach (var category in dataCategories)
-            {
-                items.Add(new SelectListItem
-                {
-                    Value = category.Id.ToString(),
-                    Text = category.Name
-                });
-            }
-
-            ViewBag.Categories = items;
-            return View(courseDetail);
-        }
     }
 }

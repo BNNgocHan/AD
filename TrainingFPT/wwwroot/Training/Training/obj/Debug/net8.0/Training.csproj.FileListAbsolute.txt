@@ -1,0 +1,8 @@
+D:\Application Development\Training\Training\obj\Debug\net8.0\Training.csproj.AssemblyReference.cache
+D:\Application Development\Training\Training\obj\Debug\net8.0\Training.GeneratedMSBuildEditorConfig.editorconfig
+D:\Application Development\Training\Training\obj\Debug\net8.0\Training.AssemblyInfoInputs.cache
+D:\Application Development\Training\Training\obj\Debug\net8.0\Training.AssemblyInfo.cs
+D:\Application Development\Training\Training\obj\Debug\net8.0\Training.csproj.CoreCompileInputs.cache
+D:\Application Development\Training\Training\obj\Debug\net8.0\Training.MvcApplicationPartsAssemblyInfo.cache
+D:\Application Development\Training\Training\obj\Debug\net8.0\Training.RazorAssemblyInfo.cache
+D:\Application Development\Training\Training\obj\Debug\net8.0\Training.RazorAssemblyInfo.cs

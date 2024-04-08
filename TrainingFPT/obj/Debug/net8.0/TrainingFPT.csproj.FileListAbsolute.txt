@@ -407,3 +407,4 @@ D:\Application Development\TrainingFPT\TrainingFPT\obj\Debug\net8.0\refint\Train
 D:\Application Development\TrainingFPT\TrainingFPT\obj\Debug\net8.0\TrainingFPT.pdb
 D:\Application Development\TrainingFPT\TrainingFPT\obj\Debug\net8.0\TrainingFPT.genruntimeconfig.cache
 D:\Application Development\TrainingFPT\TrainingFPT\obj\Debug\net8.0\ref\TrainingFPT.dll
+D:\Application Development\TrainingFPT\TrainingFPT\obj\Debug\net8.0\scopedcss\wwwroot\Training\Training\Views\Shared\_Layout.cshtml.rz.scp.css
