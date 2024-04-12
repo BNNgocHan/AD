@@ -40,7 +40,7 @@
 
                             <div class="form-group mb-3">
                                 <label asp-for="Description"></label>
-                                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
                             </div>
 
                             <div class="form-group mb-3">
@@ -52,21 +52,24 @@
                                 </select>
                                 <span asp-validation-for="Status"></span>
                             </div>
+                            <div class="form-group">
+                                <label asp-for="DocumentTopic"></label>
+                                <input type="file" asp-for="DocumentTopic" class="form-control" />
+                                <span asp-validation-for="DocumentTopic"></span>
+                                <br />
+                                <embed src="/uploads/images/@Model.ViewDocumentTopic" type="application/pdf" />
+                            </div>
                         </div>
                         
                         <div class="com-sm-12 col-md-6">
-                            <div class="form-group">
-                                <label asp-for="ViewDocumentTopic"></label>
-                                <input type="file" asp-for="ViewDocumentTopic" class="form-control" />
-                                <span asp-validation-for="ViewDocumentTopic"></span>
-                            </div>
-
                             <div class="form-group mb-3">
                                 <label asp-for="Video"></label>
                                 <input type="file" asp-for="Video" class="form-control" />
                                 <span asp-validation-for="Video"></span>
                                 <br />
-                                <video width="50%" src="/uploads/images/@Model.ViewVideo" alt="@Model.NameTopic" />
+                                <video width="250px" height="400px" controls>
+                                    <source src="/uploads/images/@Model.ViewVideo" />
+                                </video>
                             </div>
 
                             <div class="form-group mb-3">
@@ -74,7 +77,9 @@
                                 <input type="file" asp-for="Audio" class="form-control" />
                                 <span asp-validation-for="Audio"></span>
                                 <br />
-                                <audio width="50%" src="/uploads/images/@Model.ViewAudio" alt="@Model.NameTopic" />
+                                <audio controls>
+                                    <source type="audio/mpeg" src="/uploads/images/@Model.ViewAudio" />
+                                </audio>
                             </div>
                             
                             <button class="btn btn-primary" type="submit"> Update </button>

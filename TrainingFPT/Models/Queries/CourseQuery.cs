@@ -40,6 +40,7 @@ namespace TrainingFPT.Models.Queries
         {
             string dataKeyword = "%" + keyword + "%";
             List<CourseDetail> courses = new List<CourseDetail>();
+            Dictionary<int, string> categoryNames = new Dictionary<int, string>();
             using (SqlConnection connection = Database.GetSqlConnection())
             {
                 string sqlQuery = string.Empty;
@@ -62,6 +63,18 @@ namespace TrainingFPT.Models.Queries
 
                 string sql = "SELECT [co].*, CONVERT(VARCHAR(50), [co].[StartDate], 101) AS ViewStartDate, CONVERT(VARCHAR(50), [co].[EndDate], 101) AS ViewEndDate, [ca].[Name] FROM [Courses] AS [co] INNER JOIN [Categories] AS [ca] ON [co].[CategoryId] = [ca].[Id] WHERE [co].[DeletedAt] IS NULL";
                 connection.Open();
+                using (SqlCommand cmdCategories = new SqlCommand("SELECT ID, Name FROM Categories", connection))
+                {
+                    using (SqlDataReader readerCategories = cmdCategories.ExecuteReader())
+                    {
+                        while (readerCategories.Read())
+                        {
+                            categoryNames.Add(Convert.ToInt32(readerCategories["ID"]), readerCategories["Name"].ToString());
+                        }
+                    }
+                }
+                connection.Close();
+                connection.Open();
                 //SqlCommand cmd = new SqlCommand(sql, connection);
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -77,6 +90,10 @@ namespace TrainingFPT.Models.Queries
                         detail.ViewImageCourse = reader["Image"].ToString();
                         detail.Status = reader["Status"].ToString();
                         detail.viewCategoryName = reader["CategoryId"].ToString();
+                        if (categoryNames.ContainsKey(detail.CategoryId))
+                        {
+                            detail.NameCategory = categoryNames[detail.CategoryId];
+                        }
                         courses.Add(detail);
                     }
                 }

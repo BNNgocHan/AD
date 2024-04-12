@@ -8,13 +8,13 @@ namespace TrainingFPT.Models
     {
         public List<TopicDetail> TopicDetailList { get; set; }
     }
-
     public class TopicDetail
     {
         [Key]
         public int TopicId { get; set; }
         [Required(ErrorMessage = "Enter Topic's name, please")]
         public string NameTopic { get; set; }
+
         [Required(ErrorMessage = "Choose Course, please")]
         public int CourseId { get; set; }
         public string? Description { get; set; }
@@ -39,6 +39,8 @@ namespace TrainingFPT.Models
 
         public int? LikeTopic { get; set; }
         public int? StarTopic { get; set; }
+        public string? NameCourse { get; set; }
+
         [Required(ErrorMessage = "Choose Status, please")]
         public string Status { get; set; }
         public string? viewCourseName { get; set; }
