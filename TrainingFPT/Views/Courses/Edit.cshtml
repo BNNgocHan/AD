@@ -23,7 +23,7 @@
                         <div class="col-sm-12 col-md-6">
                             <div class="form-group mb-3">
                                 <label asp-for="NameCourse"></label>
-                                <input type="text" asp-for="NameCourse" class="form-control" />
+                                <input type="text" asp-for="NameCourse" class="form-control" required />
                                 <span asp-validation-for="NameCourse" class="text-danger"></span>
                                 @* id cua course *@
                                 <input type="hidden" asp-for="CourseId" />

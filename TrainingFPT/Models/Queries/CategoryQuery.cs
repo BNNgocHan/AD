@@ -1,12 +1,12 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Data.SqlClient;
 
 namespace TrainingFPT.Models.Queries
 {
     public class CategoryQuery
     {
-        // HÀM CẬP NHẬT LẠI CATEGORY
-        public bool UpdateCategoryById
-        (
+        // viet ham - cap nhat lai category
+        public bool UpdateCategoryById(
             string nameCategory,
             string description,
             string posterImage,
@@ -15,12 +15,12 @@ namespace TrainingFPT.Models.Queries
         )
         {
             bool checkUpdate = false;
-            using ( SqlConnection connection = Database.GetSqlConnection())
+            using (SqlConnection connection = Database.GetSqlConnection())
             {
                 string sqlUpdate = "UPDATE [Categories] SET [Name] = @name, [Description] = @description, [PosterImage] = @posterImage, [Status] = @status, [UpdatedAt] = @updatedAt WHERE [ID] = @id AND [DeletedAt] IS NULL";
                 connection.Open();
-                SqlCommand cmd = new SqlCommand( sqlUpdate, connection );
-                cmd.Parameters.AddWithValue("@name",  nameCategory ?? DBNull.Value.ToString());
+                SqlCommand cmd = new SqlCommand(sqlUpdate, connection);
+                cmd.Parameters.AddWithValue("@name", nameCategory ?? DBNull.Value.ToString());
                 cmd.Parameters.AddWithValue("@description", description ?? DBNull.Value.ToString());
                 cmd.Parameters.AddWithValue("@posterImage", posterImage ?? DBNull.Value.ToString());
                 cmd.Parameters.AddWithValue("@status", status ?? DBNull.Value.ToString());
@@ -29,11 +29,10 @@ namespace TrainingFPT.Models.Queries
                 cmd.ExecuteNonQuery();
                 connection.Close();
                 checkUpdate = true;
-            }    
+            }
             return checkUpdate;
         }
-
-        // HÀM LẤY THÔNG TIN CHI TIẾT CỦA CATEGORY
+        // viet ham lay thong tin chi tiet cua Category
         public CategoryDetail GetDataCategoryById(int id = 0)
         {
             CategoryDetail categoryDetail = new CategoryDetail();
@@ -43,7 +42,7 @@ namespace TrainingFPT.Models.Queries
                 connection.Open();
                 SqlCommand cmd = new SqlCommand(sqlQuery, connection);
                 cmd.Parameters.AddWithValue("@id", id);
-                using (SqlDataReader reader = cmd.ExecuteReader()) 
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
@@ -53,19 +52,18 @@ namespace TrainingFPT.Models.Queries
                         categoryDetail.PosterNameImage = reader["PosterImage"].ToString();
                         categoryDetail.Status = reader["Status"].ToString();
                     }
-                    connection.Close(); //ngắt kết nối
+                    connection.Close(); // ngat ket noi
                 }
             }
             return categoryDetail;
         }
-
-        //METHOD XÓA CATEGORY
+        // viet method xoa category
         public bool DeleteItemCategory(int id = 0)
         {
             bool statusDelete = false;
             using (SqlConnection connection = Database.GetSqlConnection())
             {
-                string sqlQuery = "UPDATE[Categories] SET [DeletedAt] = @deletedAt WHERE [ID] = @id";
+                string sqlQuery = "UPDATE [Categories] SET [DeletedAt] = @deletedAt WHERE [ID] = @id";
                 SqlCommand cmd = new SqlCommand(sqlQuery, connection);
                 connection.Open();
                 cmd.Parameters.AddWithValue("@id", id);
@@ -74,26 +72,27 @@ namespace TrainingFPT.Models.Queries
                 statusDelete = true;
                 connection.Close();
             }
-            //false: kh xoa dc - true: xoa thanh cong
+            // false : ko xoa dc - true : xoa thanh cong
             return statusDelete;
         }
-        
-        //METHOD INSERT CATEGORY
+
+
+        // viet method insert category
         public int InsertItemCategory(
             string nameCategory,
             string description,
             string image,
             string status
-            )
+        )
         {
-            int lastIdInsert = 0; // id cua category vua duoc them moi
-            string sqlQuery = "INSERT INTO [Categories]([Name],[Description],[PosterImage],[ParentId],[Status],[CreatedAt]) VALUES(@nameCategory, @description, @image, @parentId, @status, @createdAt) SELECT SCOPE_IDENTITY()";
-            //SELECT SCOPE_IDENTITY() : lay ra id vua dc them moi
+            int lastIdInsert = 0; // id cua category vua dc them moi
+            string sqlQuery = "INSERT INTO [Categories]([Name],[Description],[PosterImage],[ParentId], [Status], [CreatedAt ]) VALUES(@nameCategory, @description, @image, @parentId, @status, @createdAt) SELECT SCOPE_IDENTITY()";
+            // SELECT SCOPE_IDENTITY() : lay ra id vua dc them moi
             using (SqlConnection connection = Database.GetSqlConnection())
             {
                 connection.Open();
                 SqlCommand cmd = new SqlCommand(sqlQuery, connection);
-                cmd.Parameters.AddWithValue("@namecategory", nameCategory ?? DBNull.Value.ToString());
+                cmd.Parameters.AddWithValue("@nameCategory", nameCategory ?? DBNull.Value.ToString());
                 cmd.Parameters.AddWithValue("@description", description ?? DBNull.Value.ToString());
                 cmd.Parameters.AddWithValue("@image", image ?? DBNull.Value.ToString());
                 cmd.Parameters.AddWithValue("@parentId", 0);
@@ -102,7 +101,7 @@ namespace TrainingFPT.Models.Queries
                 lastIdInsert = Convert.ToInt32(cmd.ExecuteScalar());
                 connection.Close();
             }
-            //LastIdInsert tra ve lon hon 0 insert thanh cong va nguoc lai
+            // lastIdInsert tra ve lon hon 0 insert thanh cong va nguoc lai
             return lastIdInsert;
         }
 
@@ -113,7 +112,7 @@ namespace TrainingFPT.Models.Queries
             using (SqlConnection conn = Database.GetSqlConnection())
             {
                 string sqlQuery = string.Empty;
-                if(filterStatus != null)
+                if (filterStatus != null)
                 {
                     sqlQuery = "SELECT * FROM [Categories] WHERE [Name] LIKE @keyword AND [DeletedAt] IS NULL AND [Status] = @status";
                 }
@@ -121,10 +120,10 @@ namespace TrainingFPT.Models.Queries
                 {
                     sqlQuery = "SELECT * FROM [Categories] WHERE [Name] LIKE @keyword AND [DeletedAt] IS NULL";
                 }
-                
+
                 SqlCommand cmd = new SqlCommand(sqlQuery, conn);
                 cmd.Parameters.AddWithValue("@keyword", dataKeyword ?? DBNull.Value.ToString());
-                if(filterStatus != null)
+                if (filterStatus != null)
                 {
                     cmd.Parameters.AddWithValue("@status", filterStatus ?? DBNull.Value.ToString());
                 }
@@ -134,7 +133,7 @@ namespace TrainingFPT.Models.Queries
                     while (reader.Read())
                     {
                         CategoryDetail categoryDetail = new CategoryDetail();
-                        categoryDetail.Id = Convert.ToInt32(reader["Id"]);
+                        categoryDetail.Id = Convert.ToInt32(reader["ID"]);
                         categoryDetail.Name = reader["Name"].ToString();
                         categoryDetail.Description = reader["Description"].ToString();
                         categoryDetail.PosterNameImage = reader["PosterImage"].ToString();
@@ -147,6 +146,5 @@ namespace TrainingFPT.Models.Queries
             }
             return category;
         }
-
     }
 }

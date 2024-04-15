@@ -6,25 +6,25 @@ namespace TrainingFPT.Models
 {
     public class CategoryViewModel
     {
-        public List<CategoryDetail> CategoryDetailList {  get; set; }
+        public List<CategoryDetail> CategoryDetailList { get; set; }
     }
 
     public class CategoryDetail
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Enter Category's name, please")]
+        [Required(ErrorMessage = "Enter category's name, please")]
         public string Name { get; set; }
 
-        [AllowNull] 
+        [AllowNull]
         public string? Description { get; set; }
 
         [Required(ErrorMessage = "Choose Status, please")]
         public string Status { get; set; }
 
-        [Required(ErrorMessage = "Choose Image, please")]
-        [AllowExtensionFile(new string[] {".png", ".jpg", ".jpeg"})]
-        [AllowMaxSizeFile(5*1024*1024)]
+        [Required(ErrorMessage = "Choose File, please")]
+        [AllowExtensionFile(new string[] { ".png", ".jpg", ".jpeg" })]
+        [AllowMaxSizeFile(5 * 1024 * 1024)]
         public IFormFile PosterImage { get; set; }
 
         // view ten anh

@@ -37,6 +37,7 @@ namespace TrainingFPT.Controllers
             return View(topicViewModel);
         }
 
+        // ADD
         [HttpGet]
         public IActionResult Add()
         {
@@ -94,6 +95,7 @@ namespace TrainingFPT.Controllers
             if (Video == null)
             {
                 ModelState.Remove("Video");
+
             }
             else
             {
@@ -102,6 +104,7 @@ namespace TrainingFPT.Controllers
             if (Audio == null)
             {
                 ModelState.Remove("Audio");
+
             }
             else
             {
@@ -111,6 +114,7 @@ namespace TrainingFPT.Controllers
             if (DocumentTopic == null)
             {
                 ModelState.Remove("DocumentTopic");
+
             }
             else
             {
@@ -121,6 +125,8 @@ namespace TrainingFPT.Controllers
             {
                 try
                 {
+                    //return Ok(topic);
+
                     int idTopic = new TopicQuery().InsertDataTopic(
                         topic.NameTopic,
                         topic.CourseId,
@@ -130,7 +136,6 @@ namespace TrainingFPT.Controllers
                         documentTopic,
                         topic.Status
                     );
-
                     if (idTopic > 0)
                     {
                         TempData["saveStatus"] = true;
@@ -163,9 +168,25 @@ namespace TrainingFPT.Controllers
                 ViewBag.Courses = items;
                 return View(topic);
             }
+            if (!ModelState.IsValid)
+            {
+                List<SelectListItem> items = new List<SelectListItem>();
+                var dataCourses = new CourseQuery().GetAllDataCourses(null, null);
+                foreach (var course in dataCourses)
+                {
+                    items.Add(new SelectListItem
+                    {
+                        Value = course.CourseId.ToString(),
+                        Text = course.NameCourse
+                    });
+                }
+                ViewBag.Courses = items;
+                return View(topic);
+            }
             return View(topic);
         }
 
+        // DELETE
         [HttpGet]
         public IActionResult Delete(int id = 0)
         {
@@ -181,6 +202,7 @@ namespace TrainingFPT.Controllers
             return RedirectToAction(nameof(TopicsController.Index), "Topics");
         }
 
+        // UPDATE
         [HttpGet]
         public IActionResult Edit(int id = 0)
         {
@@ -197,14 +219,15 @@ namespace TrainingFPT.Controllers
             }
             ViewBag.Courses = items;
             return View(detail);
+
         }
         [HttpPost]
         public IActionResult Edit(TopicDetail topicDetail, IFormFile Video, IFormFile Audio, IFormFile DocumentTopic)
         {
+
             string videoTopic = "Null";
             string audioTopic = "Null";
             string documentTopic = "Null";
-            
             if (Video == null)
             {
                 ModelState.Remove("Video");
@@ -246,9 +269,9 @@ namespace TrainingFPT.Controllers
                     audioTopic,
                     documentTopic,
                     topicDetail.Status,
-                    topicDetail.TopicId
+                    topicDetail.CourseId
                 );
-                
+
                 if (update)
                 {
                     TempData["updateStatus"] = true;
@@ -258,6 +281,7 @@ namespace TrainingFPT.Controllers
                     TempData["updateStatus"] = false;
                 }
                 return RedirectToAction(nameof(TopicsController.Index), "Topics");
+
             }
 
             List<SelectListItem> items = new List<SelectListItem>();

@@ -7,8 +7,14 @@ namespace TrainingFPT.Controllers
 {
     public class CategoryController : Controller
     {
+        [HttpGet]
         public IActionResult Index(string SearchString, string Status)
         {
+            //if (string.IsNullOrEmpty(HttpContext.Session.GetString("SessionUsername")))
+            //{
+            //    return RedirectToAction(nameof(LoginController.Index), "Login");
+            //}
+
             CategoryViewModel categoryViewModel = new CategoryViewModel();
             categoryViewModel.CategoryDetailList = new List<CategoryDetail>();
             var dataCategory = new CategoryQuery().GetAllCategories(SearchString, Status);
@@ -29,13 +35,14 @@ namespace TrainingFPT.Controllers
             ViewBag.Status = Status;
             return View(categoryViewModel);
         }
-        
+
         [HttpGet]
         public IActionResult Add()
         {
             CategoryDetail model = new CategoryDetail();
             return View(model);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(CategoryDetail category, IFormFile PosterImage)
@@ -43,11 +50,12 @@ namespace TrainingFPT.Controllers
             if (ModelState.IsValid)
             {
                 // khong co loi tu phia nguoi dung
+                // upload file va lay dc ten file save database
                 string filePosterImage = UploadFileHelper.UploadFile(PosterImage);
                 try
                 {
-                    int idInsertCate = new CategoryQuery().InsertItemCategory(category.Name, category.Description, filePosterImage, category.Status);
-                    if (idInsertCate > 0)
+                    int idInsetCate = new CategoryQuery().InsertItemCategory(category.Name, category.Description, filePosterImage, category.Status);
+                    if (idInsetCate > 0)
                     {
                         TempData["saveStatus"] = true;
                     }
@@ -64,6 +72,7 @@ namespace TrainingFPT.Controllers
             }
             return View(category);
         }
+
 
         [HttpGet]
         public IActionResult Delete(int id = 0)
@@ -93,19 +102,18 @@ namespace TrainingFPT.Controllers
             try
             {
                 var detail = new CategoryQuery().GetDataCategoryById(categoryDetail.Id);
-                string uniquePosterImage = detail.PosterNameImage; //lấy lại tên ảnh cũ trước khi thay ảnh mới (nếu có)
-
-                //kiểm tra người dùng có muốn thay ảnh poster không?
-                if (categoryDetail.PosterNameImage != null)
+                string uniquePosterImage = detail.PosterNameImage; // lay lai ten anh cu truoc khi thay anh moi (neu co)
+                // nguoi dung co muon thay anh poster category hay ko?
+                if (categoryDetail.PosterImage != null)
                 {
-                    //có thay ảnh
+                    // co muon thay doi anh
                     uniquePosterImage = UploadFileHelper.UploadFile(PosterImage);
                 }
                 bool update = new CategoryQuery().UpdateCategoryById(
-                    categoryDetail.Name, 
-                    categoryDetail.Description, 
-                    uniquePosterImage, 
-                    categoryDetail.Status, 
+                    categoryDetail.Name,
+                    categoryDetail.Description,
+                    uniquePosterImage,
+                    categoryDetail.Status,
                     categoryDetail.Id);
                 if (update)
                 {
@@ -119,7 +127,7 @@ namespace TrainingFPT.Controllers
             }
             catch (Exception ex)
             {
-                //return Ok(ex.Message);
+                // return Ok(ex.Message);
                 return View(categoryDetail);
             }
         }

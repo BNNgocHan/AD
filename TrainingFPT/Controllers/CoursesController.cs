@@ -150,7 +150,8 @@ namespace TrainingFPT.Controllers
                     courseDetail.StartDate,
                     courseDetail.EndDate,
                     courseDetail.Status,
-                    courseDetail.CourseId);
+                    courseDetail.CourseId
+                );
                 if (update)
                 {
                     TempData["updateStatus"] = true;
@@ -166,7 +167,6 @@ namespace TrainingFPT.Controllers
                 return Ok(ex.Message);
                 // return View(courseDetail);
             }
-
         }
 
         [HttpGet]
